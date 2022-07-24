@@ -56,7 +56,7 @@ export default function Login() {
             Sign in
           </Button>
           <Typography>
-            Do you have an account ?
+            Don't have an account?
             <Link component={RouterLink} to='/registration'>
               Sign Up
             </Link>
