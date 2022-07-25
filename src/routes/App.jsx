@@ -7,7 +7,6 @@ import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Detail from '../pages/Detail';
 import Registration from '../pages/Registration';
-import Date from '../components/Date';
 
 const App = () => {
   return (
@@ -18,7 +17,6 @@ const App = () => {
           <Route path='Login' element={<Login />} />
           <Route path='registration' element={<Registration />} />
           <Route path='detail' element={<Detail />} />
-          <Route path='date' element={<Date />} />
           <Route path='*' element={<div>404 Error Not Found</div>} />
         </Routes>
       </LocalizationProvider>

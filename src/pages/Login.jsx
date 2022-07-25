@@ -34,8 +34,8 @@ export default function Login() {
           </Grid>
           <TextField
             sx={{ my: 2 }}
-            label='Username'
-            placeholder='Enter username'
+            label='Email'
+            placeholder='Enter Email'
             fullWidth
             required
           />
