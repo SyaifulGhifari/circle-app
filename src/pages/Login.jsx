@@ -37,6 +37,7 @@ export default function Login() {
             label='Email'
             placeholder='Enter Email'
             fullWidth
+            type='email'
             required
           />
           <TextField
