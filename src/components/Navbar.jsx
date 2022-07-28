@@ -17,7 +17,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import Link from '@mui/material/Link';
 
-import { parseCookies } from 'nookies';
+import { parseCookies, destroyCookie } from 'nookies';
 
 const settings = ['Profile', 'Sign Out '];
 
@@ -74,6 +74,11 @@ const NavBar = () => {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleClickSignOut = () => {
+    destroyCookie(null, 'usr_token');
+    window.location.reload();
   };
 
   return (
@@ -153,11 +158,12 @@ const NavBar = () => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign='center'>{setting}</Typography>
-                    </MenuItem>
-                  ))}
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign='center'>Profile</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleClickSignOut}>
+                    <Typography textAlign='center'>Sign out</Typography>
+                  </MenuItem>
                 </Menu>
               </Box>
             )}
