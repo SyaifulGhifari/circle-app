@@ -4,5 +4,5 @@ const userContext = createContext();
 
 const UserProvider = ({ children }) => {
   const user = {};
-  return <userContext></userContext>;
+  return <userContext.Provider>{children}</userContext.Provider>;
 };

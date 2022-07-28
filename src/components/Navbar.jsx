@@ -19,7 +19,7 @@ import Link from '@mui/material/Link';
 
 import { parseCookies } from 'nookies';
 
-const settings = ['Profile', 'Account'];
+const settings = ['Profile', 'Sign Out '];
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -88,7 +88,7 @@ const NavBar = () => {
             <Box sx={{ flexGrow: 1 }}>
               <img src='/image/kecil.png' alt='' width='50' height='50' />
             </Box>
-            <Search
+            {/* <Search
               sx={{ mx: 2, flexGrow: 1 }}
               style={{
                 boxShadow: '3px 3px 10px gray',
@@ -108,8 +108,7 @@ const NavBar = () => {
                 inputProps={{ 'aria-label': 'search' }}
                 fullWidth
               />
-            </Search>
-            <Box sx={{ flexGrow: 1 }} />
+            </Search> */}
             {!isLogin ? (
               <Link href='/login'>
                 <Button variant='text' sx={{ color: '#1D3743' }}>

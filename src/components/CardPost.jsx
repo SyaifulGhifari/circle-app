@@ -1,32 +1,36 @@
-import * as React from "react";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import { Box } from "@mui/material";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import Carousel from "react-material-ui-carousel";
-import { Paper, Button } from "@mui/material";
+import * as React from 'react';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import { Box } from '@mui/material';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Carousel from 'react-material-ui-carousel';
+import { Paper, Button } from '@mui/material';
 
 const images = [
   {
-    label: "San Francisco – Oakland Bay Bridge, United States",
-    imgPath: "https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60",
+    label: 'San Francisco – Oakland Bay Bridge, United States',
+    imgPath:
+      'https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60',
   },
   {
-    label: "Bird",
-    imgPath: "https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60",
+    label: 'Bird',
+    imgPath:
+      'https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60',
   },
   {
-    label: "Bali, Indonesia",
-    imgPath: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250",
+    label: 'Bali, Indonesia',
+    imgPath:
+      'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250',
   },
   {
-    label: "Goč, Serbia",
-    imgPath: "https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60",
+    label: 'Goč, Serbia',
+    imgPath:
+      'https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60',
   },
 ];
 
@@ -39,7 +43,7 @@ export function stringToColor(string) {
     hash = string.charCodeAt(i) + ((hash << 5) - hash);
   }
 
-  let color = "#";
+  let color = '#';
 
   for (i = 0; i < 3; i += 1) {
     const value = (hash >> (i * 8)) & 0xff;
@@ -55,7 +59,7 @@ export function stringAvatar(name) {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(" ")[0][0]}`,
+    children: `${name.split(' ')[0][0]}`,
   };
 }
 
@@ -65,7 +69,7 @@ export default function CardPost({ data }) {
       <CardHeader
         avatar={<Avatar {...stringAvatar(data.username.toUpperCase())} />}
         action={
-          <IconButton aria-label="settings">
+          <IconButton aria-label='settings'>
             <MoreVertIcon />
           </IconButton>
         }
@@ -78,7 +82,7 @@ export default function CardPost({ data }) {
         ))}
       </Carousel>
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant='body2' color='text.secondary'>
           {data.caption}
         </Typography>
       </CardContent>
@@ -93,12 +97,12 @@ function Item(props) {
   return (
     <Paper>
       <Box
-        component="img"
+        component='img'
         sx={{
           height: 255,
-          display: "block",
+          display: 'block',
           maxWidth: 400,
-          width: "100%",
+          width: '100%',
         }}
         src={props.item.imgPath}
         alt={props.item.label}

@@ -44,13 +44,11 @@ export default function Login() {
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/login`, dataLogin)
       .then((res) => {
-        console.log('SUCCESS');
         console.log(res.data);
         setCookie(null, 'usr_token', res.data.token);
         navigate('/');
       })
       .catch((err) => {
-        console.log('ERROR');
         console.log(err.response.data);
         setSnackbar((state) => ({
           ...state,

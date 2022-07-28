@@ -23,6 +23,7 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { stringAvatar } from '../components/CardPost';
 import CardHeader from '@mui/material/CardHeader';
 import NavBar from '../components/Navbar';
+import { parseCookies } from 'nookies';
 
 const fabStyle = {
   color: 'common.white',
@@ -35,6 +36,11 @@ const fabStyle = {
 export default function Home() {
   const [posts, setPosts] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [posting, setCaption] = useState({ caption: '' });
+
+  const cookies = parseCookies();
+  const token = cookies.usr_token;
+  const isLogin = token != null;
 
   useEffect(() => {
     fetchDataPosts();
@@ -47,7 +53,6 @@ export default function Home() {
       )
       .then((response) => {
         const { data } = response.data;
-        console.log(data);
         setPosts(data);
       })
       .catch((error) => console.log(error));
@@ -59,6 +64,26 @@ export default function Home() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleCaption = (e) => {
+    console.log(e);
+    setCaption({ ...posting, caption: e.target.value });
+  };
+
+  const handlePost = (e) => {
+    const form = new FormData();
+    form.append('caption', posting.caption);
+
+    axios
+      .post(`${process.env.REACT_APP_BACKEND_URL}/myposts`, form, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err.response.data);
+      })
+      .finally(setOpen(false));
   };
 
   return (
@@ -80,13 +105,15 @@ export default function Home() {
             ))}
           </Box>
         </Box>
-        <Fab
-          sx={{ position: 'fixed', bottom: 16, right: 16, ...fabStyle }}
-          aria-label='Add'
-          onClick={handleClickOpen}
-        >
-          <AddIcon />
-        </Fab>
+        {!isLogin ? null : (
+          <Fab
+            sx={{ position: 'fixed', bottom: 16, right: 16, ...fabStyle }}
+            aria-label='Add'
+            onClick={handleClickOpen}
+          >
+            <AddIcon />
+          </Fab>
+        )}
         <Dialog
           open={open}
           onClose={handleClose}
@@ -119,6 +146,7 @@ export default function Home() {
                   rows={4}
                   variant='filled'
                   fullWidth
+                  onChange={handleCaption}
                 />
               </FormControl>
             </Box>
@@ -132,7 +160,7 @@ export default function Home() {
             </IconButton>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Post</Button>
+            <Button onClick={handlePost}>Post</Button>
             <Button onClick={handleClose}>Cancel</Button>
           </DialogActions>
         </Dialog>
