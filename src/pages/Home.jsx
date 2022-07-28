@@ -40,6 +40,7 @@ export default function Home() {
 
   const cookies = parseCookies();
   const token = cookies.usr_token;
+  const name = cookies.usr_name;
   const isLogin = token != null;
 
   useEffect(() => {
@@ -48,9 +49,9 @@ export default function Home() {
 
   const fetchDataPosts = async () => {
     await axios
-      .get(
-        `https://virtserver.swaggerhub.com/InstaCloneAlta/InstaClone/1.0.0-oas3/posts`
-      )
+      .get(`${process.env.REACT_APP_BACKEND_URL}/myposts`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((response) => {
         const { data } = response.data;
         setPosts(data);
@@ -124,8 +125,8 @@ export default function Home() {
           <DialogContent>
             <DialogContentText>
               <CardHeader
-                avatar={<Avatar {...stringAvatar('naufal')} />}
-                title='naufal'
+                avatar={<Avatar {...stringAvatar(name)} />}
+                title={name}
               />
             </DialogContentText>
             <Box

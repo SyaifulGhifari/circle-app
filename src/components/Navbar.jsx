@@ -16,10 +16,38 @@ import InputBase from '@mui/material/InputBase';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import Link from '@mui/material/Link';
+import CardHeader from '@mui/material/CardHeader';
 
 import { parseCookies, destroyCookie } from 'nookies';
 
-const settings = ['Profile', 'Sign Out '];
+export function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.slice(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
+
+export function stringAvatar(name) {
+  return {
+    sx: {
+      bgcolor: stringToColor(name),
+    },
+    children: `${name.split(' ')[0][0]}`,
+  };
+}
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -66,6 +94,7 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 const NavBar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const cookies = parseCookies();
+  const isName = cookies.usr_name;
   const isLogin = cookies.usr_token != null;
 
   const handleOpenUserMenu = (event) => {
@@ -136,10 +165,7 @@ const NavBar = () => {
                 </IconButton>
                 <Tooltip title='Open settings'>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar
-                      alt='Remy Sharp'
-                      src='/static/images/avatar/2.jpg'
-                    />
+                    {<Avatar {...stringAvatar(isName)} />}
                   </IconButton>
                 </Tooltip>
                 <Menu

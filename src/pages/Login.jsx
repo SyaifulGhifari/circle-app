@@ -46,6 +46,7 @@ export default function Login() {
       .then((res) => {
         console.log(res.data);
         setCookie(null, 'usr_token', res.data.token);
+        setCookie(null, 'usr_name', res.data.data.Name);
         navigate('/');
       })
       .catch((err) => {
