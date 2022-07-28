@@ -13,6 +13,7 @@ import {
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
+import { setCookie } from 'nookies';
 import Loading from '../components/Loading';
 
 export default function Login() {
@@ -45,6 +46,7 @@ export default function Login() {
       .then((res) => {
         console.log('SUCCESS');
         console.log(res.data);
+        setCookie(null, 'usr_token', res.data.token);
         navigate('/');
       })
       .catch((err) => {
@@ -141,12 +143,13 @@ export default function Login() {
                 }}
                 fullWidth
               >
-                Sign in
+                Sign In
               </Button>
             </form>
             <Typography>
               Don't have an account?
               <Link
+                underline='hover'
                 component={RouterLink}
                 to='/registration'
                 style={{ color: '#71C9CE', marginLeft: 10 }}

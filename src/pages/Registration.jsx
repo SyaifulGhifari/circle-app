@@ -88,7 +88,7 @@ export default function Registration() {
   const handleSubmit = (e) => {
     const newValues = {
       ...values,
-      gender: values.gender === 'female' ? true : false,
+      gender: values.gender === 'female',
     };
     e.preventDefault();
     setIsLoading(true);
@@ -217,7 +217,11 @@ export default function Registration() {
             <Button
               type='submit'
               variant='contained'
-              style={{ margin: '8px 0', color: '3F72AF' }}
+              style={{
+                margin: '8px 0',
+                backgroundColor: '#71C9CE',
+                color: '#1D3743',
+              }}
               fullWidth
             >
               Sign up
@@ -225,8 +229,12 @@ export default function Registration() {
           </form>
           <Typography>
             Already have an account?
-            <Link component={RouterLink} to='/login'>
-              Log in
+            <Link
+              component={RouterLink}
+              to='/login'
+              style={{ color: '#1D3743', marginLeft: 10 }}
+            >
+              Sign In
             </Link>
           </Typography>
           <Snackbar

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -14,8 +15,11 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
+import Link from '@mui/material/Link';
 
-const settings = ['Profile', 'Logout'];
+import { parseCookies } from 'nookies';
+
+const settings = ['Profile', 'Account'];
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -59,24 +63,10 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-// function HideOnScroll(props) {
-//   const { children } = props;
-//   const trigger = useScrollTrigger({
-//     target: window ? window() : undefined,
-//   });
-
-//   return (
-//     <Slide appear={false} direction='down' in={!trigger}>
-//       {children}
-//     </Slide>
-//   );
-// }
-// HideOnScroll.propTypes = {
-//   children: PropTypes.element.isRequired,
-// };
-
 const NavBar = () => {
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const cookies = parseCookies();
+  const isLogin = cookies.usr_token != null;
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -101,7 +91,7 @@ const NavBar = () => {
             <Search
               sx={{ mx: 2, flexGrow: 1 }}
               style={{
-                boxShadow: '5px 5px 10px gray',
+                boxShadow: '3px 3px 10px gray',
                 border: '2px solid rgb(29, 55, 67)',
                 borderRadius: '20px',
               }}
@@ -120,49 +110,61 @@ const NavBar = () => {
               />
             </Search>
             <Box sx={{ flexGrow: 1 }} />
-            <Box
-              sx={{
-                display: 'flex',
-              }}
-            >
-              <IconButton sx={{ color: '#1D3743' }}>
-                <HomeIcon sx={{ fontSize: 30 }} />
-              </IconButton>
-              <IconButton sx={{ color: '#1D3743' }}>
-                <AddIcon sx={{ fontSize: 30 }} />
-              </IconButton>
-              <Tooltip title='Open settings'>
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id='menu-appbar'
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
+            {!isLogin ? (
+              <Link href='/login'>
+                <Button variant='text' sx={{ color: '#1D3743' }}>
+                  Login
+                </Button>
+              </Link>
+            ) : (
+              <Box
+                sx={{
+                  display: 'flex',
                 }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign='center'>{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+                <Link href='/'>
+                  <IconButton sx={{ color: '#1D3743' }}>
+                    <HomeIcon sx={{ fontSize: 30 }} />
+                  </IconButton>
+                </Link>
+                <IconButton sx={{ color: '#1D3743' }}>
+                  <AddIcon sx={{ fontSize: 30 }} />
+                </IconButton>
+                <Tooltip title='Open settings'>
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <Avatar
+                      alt='Remy Sharp'
+                      src='/static/images/avatar/2.jpg'
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: '45px' }}
+                  id='menu-appbar'
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {settings.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <Typography textAlign='center'>{setting}</Typography>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </Box>
+            )}
           </Toolbar>
         </Container>
       </AppBar>
-      {/* </HideOnScroll> */}
     </>
   );
 };
