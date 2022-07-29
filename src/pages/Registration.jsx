@@ -52,12 +52,6 @@ export default function Registration() {
     setValues({ ...values, [prop]: event.target.value });
   };
 
-  // const handleChange2 = function (prop) {
-  //   return function (event) {
-  //     setValues({ ...values, [prop]: event.target.value });
-  //   };
-  // };
-
   const handleChangeEmail = (e) => {
     setValues((state) => ({ ...state, email: e.target.value }));
   };

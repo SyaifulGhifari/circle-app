@@ -58,9 +58,7 @@ export default function Login() {
           isError: true,
         }));
       })
-      .finally(() => {
-        // setIsLoading(false);
-      });
+      .finally(() => {});
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
@@ -106,6 +104,7 @@ export default function Login() {
               width: 280,
               backgroundColor: '#1D3743',
               color: '#71C9CE',
+              marginLeft: 30,
             }}
           >
             <Grid align='center'>
