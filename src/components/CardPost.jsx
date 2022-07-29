@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
@@ -15,6 +16,7 @@ import DialogComponent from "./DialogComponent";
 import axios from "axios";
 import { parseCookies } from "nookies";
 import { useNavigate } from "react-router-dom";
+
 
 export function stringToColor(string) {
   if (!string) return "#F98A59";
@@ -111,11 +113,13 @@ export default function CardPost({ data }) {
       .finally();
   };
 
+
   return (
     <Card sx={{ width: 400 }}>
       <CardHeader
         avatar={<Avatar {...stringAvatar(data.Username?.toUpperCase())} />}
         action={
+
           !isLogin ? null : (
             <Tooltip title="Open Actions">
               <IconButton onClick={handleOpenUserMenu} aria-label="actions">
@@ -123,6 +127,7 @@ export default function CardPost({ data }) {
               </IconButton>
             </Tooltip>
           )
+
         }
         title={data.Username}
         subheader={formatDate(data.Created_At)}
