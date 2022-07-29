@@ -1,42 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import CardPost from '../components/CardPost';
-import {
-  Box,
-  Container,
-  Fab,
-  Button,
-  TextField,
-  Avatar,
-  Typography,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import UpIcon from '@mui/icons-material/KeyboardArrowUp';
-import axios from 'axios';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import { stringAvatar } from '../components/CardPost';
-import CardHeader from '@mui/material/CardHeader';
-import NavBar from '../components/Navbar';
-import { parseCookies } from 'nookies';
+import React, { useState, useEffect } from "react";
+import CardPost from "../components/CardPost";
+import { Box, Container, Fab } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import UpIcon from "@mui/icons-material/KeyboardArrowUp";
+import axios from "axios";
+import DialogComponent from "../components/DialogComponent";
+
+import NavBar from "../components/Navbar";
+import { parseCookies } from "nookies";
 
 const fabStyle = {
-  color: 'common.white',
-  bgcolor: '#112d4e',
-  '&:hover': {
-    bgcolor: '#40567a',
+  color: "common.white",
+  bgcolor: "#112d4e",
+  "&:hover": {
+    bgcolor: "#40567a",
   },
 };
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
-  const [open, setOpen] = React.useState(false);
-  const [posting, setCaption] = useState({ caption: '' });
+  const [open, setOpen] = useState(false);
+  const [posting, setCaption] = useState({ caption: "" });
 
   const cookies = parseCookies();
   const token = cookies.usr_token;
@@ -45,7 +29,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchDataPosts();
-  }, []);
+  }, [posts]);
 
   const fetchDataPosts = async () => {
     await axios
@@ -72,7 +56,7 @@ export default function Home() {
 
   const handlePost = (e) => {
     const form = new FormData();
-    form.append('caption', posting.caption);
+    form.append("caption", posting.caption);
 
     axios
       .post(`${process.env.REACT_APP_BACKEND_URL}/myposts`, form, {
@@ -82,97 +66,42 @@ export default function Home() {
       .catch((err) => {
         console.log(err.response.data);
       })
-      .finally(setOpen(false));
+      .finally(() => {
+        setOpen(false);
+        setCaption("");
+      });
   };
 
   return (
     <>
+      <div id="up"></div>
       <NavBar />
-      <div id='up'></div>
-      <Container sx={{ height: '100%' }} fixed>
+      <Container sx={{ height: "100%" }} fixed>
         <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'space-around',
+            display: "flex",
+            justifyContent: "space-around",
             p: 1,
             m: 1,
             borderRadius: 1,
           }}
         >
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
             {posts.map((data) => (
-              <CardPost key={data.id} data={data} />
+              <CardPost key={data.id} data={data} name={name} />
             ))}
           </Box>
         </Box>
         {!isLogin ? null : (
-          <Fab
-            sx={{ position: 'fixed', bottom: 16, right: 16, ...fabStyle }}
-            aria-label='Add'
-            onClick={handleClickOpen}
-          >
+          <Fab sx={{ position: "fixed", bottom: 16, right: 16, ...fabStyle }} aria-label="Add" onClick={handleClickOpen}>
             <AddIcon />
           </Fab>
         )}
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          fullWidth='true'
-          maxWidth='sm'
-        >
-          <DialogTitle>Create Post</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              <CardHeader
-                avatar={<Avatar {...stringAvatar(name)} />}
-                title={name}
-              />
-            </DialogContentText>
-            <Box
-              noValidate
-              component='form'
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                m: 'auto',
-                width: '100%',
-              }}
-            >
-              <FormControl sx={{ mt: 2, minWidth: 120 }}>
-                <TextField
-                  id='filled-multiline-static'
-                  label='Caption'
-                  multiline
-                  rows={4}
-                  variant='filled'
-                  fullWidth
-                  onChange={handleCaption}
-                />
-              </FormControl>
-            </Box>
-            <IconButton
-              color='primary'
-              aria-label='upload picture'
-              component='label'
-            >
-              <input hidden accept='image/*' type='file' />
-              <PhotoCamera />
-            </IconButton>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handlePost}>Post</Button>
-            <Button onClick={handleClose}>Cancel</Button>
-          </DialogActions>
-        </Dialog>
-        <Fab
-          sx={{ position: 'fixed', bottom: 16, left: 16, ...fabStyle }}
-          aria-label='Up'
-          color='primary'
-          href='#up'
-        >
+        <Fab sx={{ position: "fixed", bottom: 16, left: 16, ...fabStyle }} aria-label="Up" color="primary" href="#up">
           <UpIcon />
         </Fab>
       </Container>
+      <DialogComponent open={open} handleClose={handleClose} name={name} handleCaption={handleCaption} handlePost={handlePost} caption={posting.caption} title={"Create Post"} btnText={"Post"} />
     </>
   );
 }
