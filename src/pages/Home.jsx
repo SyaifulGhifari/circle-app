@@ -49,9 +49,7 @@ export default function Home() {
 
   const fetchDataPosts = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/myposts`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(`${process.env.REACT_APP_BACKEND_URL}/posts`)
       .then((response) => {
         const { data } = response.data;
         setPosts(data);
@@ -90,6 +88,7 @@ export default function Home() {
   return (
     <>
       <NavBar />
+      <div id='up'></div>
       <Container sx={{ height: '100%' }} fixed>
         <Box
           sx={{
@@ -169,6 +168,7 @@ export default function Home() {
           sx={{ position: 'fixed', bottom: 16, left: 16, ...fabStyle }}
           aria-label='Up'
           color='primary'
+          href='#up'
         >
           <UpIcon />
         </Fab>
