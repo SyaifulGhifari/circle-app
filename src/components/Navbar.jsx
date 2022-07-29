@@ -107,6 +107,7 @@ const NavBar = () => {
 
   const handleClickSignOut = () => {
     destroyCookie(null, 'usr_token');
+    destroyCookie(null, 'usr_name');
     window.location.reload();
   };
 
