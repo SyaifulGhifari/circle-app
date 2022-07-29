@@ -13,6 +13,8 @@ import { Paper, Button } from '@mui/material';
 import moment from 'moment';
 
 export function stringToColor(string) {
+  if (!string) return '#F98A59';
+
   let hash = 0;
   let i;
 
@@ -37,7 +39,7 @@ export function stringAvatar(name) {
     sx: {
       bgcolor: stringToColor(name),
     },
-    children: `${name.split(' ')[0][0]}`,
+    children: `${name?.split(' ')[0][0]}`,
   };
 }
 
