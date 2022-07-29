@@ -17,7 +17,7 @@ const DialogComponent = (props) => {
       <DialogTitle>{props.title}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          <CardHeader avatar={<Avatar {...stringAvatar(props.name.toUpperCase())} />} title={props.name} />
+          <CardHeader avatar={<Avatar {...stringAvatar(props.name?.toUpperCase())} />} title={props.name} />
         </DialogContentText>
         <Box
           noValidate

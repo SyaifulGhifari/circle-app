@@ -116,11 +116,13 @@ export default function CardPost({ data }) {
       <CardHeader
         avatar={<Avatar {...stringAvatar(data.Username?.toUpperCase())} />}
         action={
-          <Tooltip title="Open Actions">
-            <IconButton onClick={handleOpenUserMenu} aria-label="actions">
-              <MoreVertIcon />
-            </IconButton>
-          </Tooltip>
+          !isLogin ? null : (
+            <Tooltip title="Open Actions">
+              <IconButton onClick={handleOpenUserMenu} aria-label="actions">
+                <MoreVertIcon />
+              </IconButton>
+            </Tooltip>
+          )
         }
         title={data.Username}
         subheader={formatDate(data.Created_At)}

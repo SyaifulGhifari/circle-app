@@ -145,25 +145,31 @@ export default function Detail(props) {
               </CardContent>
               <CardActions disableSpacing></CardActions>
             </Card>
-            <Box sx={{ display: "flex", marginTop: "10px", alignItems: "center", gap: 1, justifyContent: "space-around" }}>
-              <Avatar {...stringAvatar(name?.toUpperCase())} sizes="small" />
-              <TextField id="standard-basic" label="Add Comment..." variant="standard" size="small" fullWidth={true} onChange={handleComment} />
-              <Button variant="outlined" onClick={() => addComment(posts.ID)}>
-                Comment
-              </Button>
-            </Box>
+            {!isLogin ? null : (
+              <Box sx={{ display: "flex", marginTop: "10px", alignItems: "center", gap: 1, justifyContent: "space-around" }}>
+                <Avatar {...stringAvatar(name?.toUpperCase())} sizes="small" />
+                <TextField id="standard-basic" label="Add Comment..." variant="standard" size="small" fullWidth={true} onChange={handleComment} />
+                <Button variant="outlined" onClick={() => addComment(posts.ID)}>
+                  Comment
+                </Button>
+              </Box>
+            )}
+
             <List sx={{ justifyContent: "space-between" }}>
               {posts.Comments?.map((value) => (
                 <ListItem key={value.id} alignItems="flex-start">
                   <ListItemAvatar>
-                    <Avatar {...stringAvatar(value.Username.toUpperCase())} />
+                    <Avatar {...stringAvatar(value.Username?.toUpperCase())} />
                   </ListItemAvatar>
                   <ListItemText primary={value.Username} secondary={<React.Fragment>{value.Caption}</React.Fragment>} />
-                  <Tooltip title="Open Actions">
-                    <IconButton onClick={handleOpenUserMenu} aria-label="actions">
-                      <MoreVertIcon />
-                    </IconButton>
-                  </Tooltip>
+                  {!isLogin ? null : (
+                    <Tooltip title="Open Actions">
+                      <IconButton onClick={handleOpenUserMenu} aria-label="actions">
+                        <MoreVertIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+
                   <Menu
                     sx={{ mt: "45px" }}
                     id="menu-appbar"
