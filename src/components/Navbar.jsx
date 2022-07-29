@@ -161,9 +161,6 @@ const NavBar = () => {
                     <HomeIcon sx={{ fontSize: 30 }} />
                   </IconButton>
                 </Link>
-                <IconButton sx={{ color: '#1D3743' }}>
-                  <AddIcon sx={{ fontSize: 30 }} />
-                </IconButton>
                 <Tooltip title='Open settings'>
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                     {<Avatar {...stringAvatar(isName)} />}

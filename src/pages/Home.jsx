@@ -49,9 +49,7 @@ export default function Home() {
 
   const fetchDataPosts = async () => {
     await axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/myposts`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      .get(`${process.env.REACT_APP_BACKEND_URL}/posts`)
       .then((response) => {
         const { data } = response.data;
         setPosts(data);
