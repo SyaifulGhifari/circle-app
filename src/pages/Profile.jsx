@@ -1,59 +1,53 @@
-import React, { useState } from "react";
-import NavBar from "../components/Navbar";
-import { Grid, Link, Paper, TextField, Button, Typography, FormControl, FormLabel, FormControlLabel, InputLabel, InputAdornment, IconButton, OutlinedInput, Radio, RadioGroup, Snackbar, Alert } from "@mui/material";
+import React, { useState, useEffect } from 'react';
+import NavBar from '../components/Navbar';
+import { useNavigate } from 'react-router-dom';
+import {
+  Grid,
+  Paper,
+  TextField,
+  Button,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Snackbar,
+  Alert,
+} from '@mui/material';
 
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
-import axios from "axios";
-import { parseCookies } from "nookies";
+import axios from 'axios';
+import { parseCookies } from 'nookies';
 
 export default function Profile() {
   const cookies = parseCookies();
   const token = cookies.usr_token;
-  const name = cookies.usr_name;
-  const isLogin = token != null;
 
   const [values, setValues] = useState({
-    name: "",
-    email: "",
-    password: "",
-    gender: "",
+    name: '',
+    email: '',
+    password: '',
+    gender: '',
     bod: null,
   });
 
+  const navigate = useNavigate();
+
   const [snackbar, setSnackbar] = useState({
     open: false,
-    message: "",
+    message: '',
     isError: false,
   });
 
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(values);
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleChangeEmail = (e) => {
-    setValues((state) => ({ ...state, email: e.target.value }));
-  };
+  useEffect(() => {
+    fetchDataProfile();
+  }, []);
 
   const handleName = (e) => {
     setValues({ ...values, name: e.target.value });
-  };
-
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
   };
 
   const handleDob = (value) => {
@@ -70,33 +64,32 @@ export default function Profile() {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
-        const { data } = res;
+        const { data } = res.data;
         setValues({
-          name: data.name,
-          email: data.email,
-          password: "",
-          gender: data.gender,
-          bod: null,
+          name: data.Name,
+          email: data.Email,
+          password: '',
+          gender: data.Gender === false ? 'female' : 'male',
+          bod: data.Bod,
         });
       })
       .catch((err) => {
         console.log(err.response.data);
       })
       .finally(() => {});
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
   };
 
   const handleSubmit = (e) => {
     const newValues = {
       ...values,
-      gender: values.gender === "female",
+      gender: values.gender === 'female',
     };
     e.preventDefault();
     setIsLoading(true);
     axios
-      .post(`${process.env.REACT_APP_BACKEND_URL}/users`, newValues)
+      .put(`${process.env.REACT_APP_BACKEND_URL}/profile`, newValues, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((res) => {})
       .catch((err) => {
         console.log(err.response.data);
@@ -107,7 +100,9 @@ export default function Profile() {
           isError: true,
         }));
       })
-      .finally(() => {});
+      .finally(() => {
+        navigate('/');
+      });
     setTimeout(() => {
       setIsLoading(false);
     }, 500);
@@ -118,7 +113,14 @@ export default function Profile() {
   return (
     <>
       <NavBar />
-      <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
+      <Grid
+        container
+        spacing={0}
+        direction='column'
+        alignItems='center'
+        justifyContent='center'
+        style={{ minHeight: '100vh' }}
+      >
         <Grid item xs={3}>
           <Paper
             elevation={8}
@@ -127,57 +129,76 @@ export default function Profile() {
               width: 280,
             }}
           >
-            <Grid align="center">
+            <Grid align='center'>
               <h2>Update Your Profile</h2>
             </Grid>
             <form onSubmit={handleSubmit}>
-              <TextField label="Name" placeholder="Enter name" fullWidth={true} value={values.name} required onChange={handleName} />
-              <TextField sx={{ mt: 2 }} label="Email" value={values.email} placeholder="Enter Email" fullWidth={true} type="email" required onChange={handleChangeEmail} />
+              <TextField
+                label='Name'
+                placeholder={values.name}
+                fullWidth={true}
+                value={values.name}
+                onChange={handleName}
+              />
 
-              <FormControl fullWidth variant="outlined" sx={{ mt: 2 }}>
-                <InputLabel htmlFor="outlined-adornment-password" required>
-                  Password
-                </InputLabel>
-                <OutlinedInput
-                  id="outlined-adornment-password"
-                  type={values.showPassword ? "text" : "password"}
-                  value={values.password}
-                  onChange={handleChange("password")}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword} edge="end">
-                        {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  label="Password"
+              <FormControl sx={{ mt: 2 }} fullWidth>
+                <DatePicker
+                  sx={{ my: 5 }}
+                  label='Date of Birth'
+                  inputFormat='MM/DD/yyyy'
+                  value={values.bod}
+                  onChange={handleDob}
+                  fullWidth
+                  renderInput={(params) => <TextField {...params} />}
                 />
               </FormControl>
-              <FormControl sx={{ mt: 2 }} fullWidth required>
-                <DatePicker sx={{ my: 5 }} label="Date of Birth" inputFormat="MM/DD/yyyy" value={values.bod} onChange={handleDob} fullWidth renderInput={(params) => <TextField {...params} />} />
-              </FormControl>
               <FormControl>
-                <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
-                <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="row-radio-buttons-group" onChange={handleChangeGender}>
-                  <FormControlLabel value="female" control={<Radio />} label="Female" />
-                  <FormControlLabel value="male" control={<Radio />} label="Male" />
+                <FormLabel id='demo-row-radio-buttons-group-label'>
+                  Gender
+                </FormLabel>
+                <RadioGroup
+                  row
+                  aria-labelledby='demo-row-radio-buttons-group-label'
+                  name='row-radio-buttons-group'
+                  onChange={handleChangeGender}
+                  value={values.gender}
+                >
+                  <FormControlLabel
+                    value='female'
+                    control={<Radio />}
+                    label='Female'
+                  />
+                  <FormControlLabel
+                    value='male'
+                    control={<Radio />}
+                    label='Male'
+                  />
                 </RadioGroup>
               </FormControl>
               <Button
-                type="submit"
-                variant="contained"
+                type='submit'
+                variant='contained'
                 style={{
-                  margin: "8px 0",
-                  backgroundColor: "#71C9CE",
-                  color: "#1D3743",
+                  margin: '8px 0',
+                  backgroundColor: '#71C9CE',
+                  color: '#1D3743',
                 }}
                 fullWidth
               >
-                Sign up
+                Update Profile
               </Button>
             </form>
-            <Snackbar autoHideDuration={6000} anchorOrigin={{ vertical: "top", horizontal: "right" }} open={snackbar.open} onClose={handleCloseSnackbar}>
-              <Alert onClose={handleCloseSnackbar} severity={snackbar.isError ? "error" : "success"} sx={{ width: "100%" }}>
+            <Snackbar
+              autoHideDuration={6000}
+              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+              open={snackbar.open}
+              onClose={handleCloseSnackbar}
+            >
+              <Alert
+                onClose={handleCloseSnackbar}
+                severity={snackbar.isError ? 'error' : 'success'}
+                sx={{ width: '100%' }}
+              >
                 {snackbar.message}
               </Alert>
             </Snackbar>
