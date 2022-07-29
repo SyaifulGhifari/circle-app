@@ -11,6 +11,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Carousel from 'react-material-ui-carousel';
 import { Paper, Button } from '@mui/material';
 import moment from 'moment';
+import { parseCookies } from 'nookies';
 
 export function stringToColor(string) {
   if (!string) return '#F98A59';
@@ -49,13 +50,17 @@ function formatDate(date) {
 }
 
 export default function CardPost({ data }) {
+  const cookies = parseCookies();
+  const token = cookies.usr_token;
+  const isLogin = token != null;
+
   return (
     <Card sx={{ width: 400 }}>
       <CardHeader
         avatar={<Avatar {...stringAvatar(data.Username?.toUpperCase())} />}
         action={
           <IconButton aria-label='settings'>
-            <MoreVertIcon />
+            {!isLogin ? null : <MoreVertIcon />}
           </IconButton>
         }
         title={data.Username}
