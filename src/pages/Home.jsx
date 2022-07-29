@@ -88,6 +88,7 @@ export default function Home() {
   return (
     <>
       <NavBar />
+      <div id='up'></div>
       <Container sx={{ height: '100%' }} fixed>
         <Box
           sx={{
@@ -167,6 +168,7 @@ export default function Home() {
           sx={{ position: 'fixed', bottom: 16, left: 16, ...fabStyle }}
           aria-label='Up'
           color='primary'
+          href='#up'
         >
           <UpIcon />
         </Fab>
